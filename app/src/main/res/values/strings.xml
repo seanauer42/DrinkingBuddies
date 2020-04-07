@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Drinking buddies</string>
+
+    <string-array name="categories">
+        <item>Choose a category</item>
+        <item>Movie</item>
+        <item>Cards</item>
+        <item>Video</item>
+        <item>Event</item>
+        <item>Misc</item>
+    </string-array>
+
+</resources>

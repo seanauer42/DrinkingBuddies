@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        tools:context=".activities.RegisterActivity">
+
+    <EditText
+            android:id="@+id/username_registeractivity"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="150dp"
+            android:layout_marginEnd="32dp"
+            android:height="50dp"
+            android:background="@drawable/white_rounded_textfield"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:paddingLeft="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+            android:id="@+id/password_registeractivity"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:height="50dp"
+            android:background="@drawable/white_rounded_textfield"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingLeft="24dp"
+            app:layout_constraintEnd_toEndOf="@+id/username_registeractivity"
+            app:layout_constraintStart_toStartOf="@+id/username_registeractivity"
+            app:layout_constraintTop_toBottomOf="@+id/email_edittext_register" />
+
+    <TextView
+            android:id="@+id/login_textview_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="I already have an account"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/password_registeractivity"
+            app:layout_constraintHorizontal_bias="0.461"
+            app:layout_constraintStart_toStartOf="@+id/password_registeractivity"
+            app:layout_constraintTop_toBottomOf="@+id/register_button_register" />
+
+    <Button
+            android:id="@+id/register_button_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_light_gray"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="register"
+            app:layout_constraintEnd_toEndOf="@+id/password_registeractivity"
+            app:layout_constraintStart_toStartOf="@+id/password_registeractivity"
+            app:layout_constraintTop_toBottomOf="@+id/password_registeractivity" />
+
+    <EditText
+            android:id="@+id/email_edittext_register"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/white_rounded_textfield"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_registeractivity" />
+</androidx.constraintlayout.widget.ConstraintLayout>
