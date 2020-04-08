@@ -1,11 +1,9 @@
 package com.hanrstudios.drinkingbuddies.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock.sleep
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.hanrstudios.drinkingbuddies.R
 import com.hanrstudios.drinkingbuddies.classes.DrinkingGame
@@ -31,7 +29,8 @@ class RatingActivity : AppCompatActivity() {
         val drunkRating: Float = drunk_ratingbar.rating
         val gameId: String? = game?.gameId
         val uid = FirebaseAuth.getInstance().uid
-        val refDrunk = FirebaseDatabase.getInstance().getReference("users/$uid/ratings/drunk/$gameId")
+        val refDrunk =
+            FirebaseDatabase.getInstance().getReference("users/$uid/ratings/drunk/$gameId")
         val refFun = FirebaseDatabase.getInstance().getReference("users/$uid/ratings/fun/$gameId")
 
         refDrunk.setValue(drunkRating)
@@ -39,7 +38,11 @@ class RatingActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 game?.averageDrunkRating(drunkRating)
                 game?.averageFunRating(funRating)
-                Toast.makeText(this, "you set fun rating to: $funRating and drunk rating to: $drunkRating", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "you set fun rating to: $funRating and drunk rating to: $drunkRating",
+                    Toast.LENGTH_LONG
+                ).show()
                 finish()
             }
 

@@ -30,7 +30,7 @@ class UserPageActivity : AppCompatActivity() {
 
     private fun addFriend() {
         val uid = currentUser?.uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/${currentUser?.uid}")
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
     }
 
     private fun setUser(user: User) {

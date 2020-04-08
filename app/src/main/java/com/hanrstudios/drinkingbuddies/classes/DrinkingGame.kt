@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.parcel.Parcelize
+import kotlin.math.roundToLong
 
 @Parcelize
 class DrinkingGame(
@@ -22,18 +23,18 @@ class DrinkingGame(
         val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
         val refNum = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/num")
 
-        refAvg.addValueEventListener(object : ValueEventListener {
+        refAvg.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.value == null) {
                     refAvg.setValue(0)
                 }
-                avg = p0.value.toString().toFloat() ?: 0f
-                refNum.addValueEventListener(object : ValueEventListener {
+                avg = p0.value?.toString()?.toFloat() ?: 0f
+                refNum.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(p0: DataSnapshot) {
                         if (p0.value == null) {
                             refNum.setValue(0)
                         }
-                        num = p0.value.toString().toInt()
+                        num = p0.value?.toString()?.toInt() ?: 0
                         val newAverage = avg + ((drunkRating - avg) / (num + 1))
                         refAvg.setValue(newAverage)
                         refNum.setValue(num + 1)
@@ -86,18 +87,18 @@ class DrinkingGame(
 //        val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
 //        val refNum = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/num")
 
-        refAvg.addValueEventListener(object : ValueEventListener {
+        refAvg.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.value == null) {
                     refAvg.setValue(0)
                 }
-                avg = p0.value.toString().toFloat() ?: 0f
-                refNum.addValueEventListener(object : ValueEventListener {
+                avg = p0.value?.toString()?.toFloat() ?: 0f
+                refNum.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(p0: DataSnapshot) {
                         if (p0.value == null) {
                             refNum.setValue(0)
                         }
-                        num = p0.value.toString().toInt()
+                        num = p0.value?.toString()?.toInt() ?: 0
                         val newAverage = avg + ((funRating - avg) / (num + 1))
                         refAvg.setValue(newAverage)
                         refNum.setValue(num + 1)

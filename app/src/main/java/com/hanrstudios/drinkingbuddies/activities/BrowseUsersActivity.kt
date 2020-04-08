@@ -93,37 +93,9 @@ class UserItem(val user: User) : Item<ViewHolder>() {
             override fun onCancelled(p0: DatabaseError) {
             }
         })
-//        val mostRecentGame = FirebaseDatabase.getInstance().getReference("userInfo/$user.uid/mostRecentGame").toString()
-//        viewHolder.itemView.most_recent_game_userrow.text = mostRecentGame
     }
 
     override fun getLayout(): Int {
         return R.layout.user_data_row
     }
 }
-//
-//class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
-//
-//    override fun bind(viewHolder: ViewHolder, position: Int) {
-//        //will be called in our user layout
-//        viewHolder.itemView.gametitle_gamerow.text = game.title
-//        viewHolder.itemView.category_gamerow.text = game.category
-//        viewHolder.itemView.createddate_gamerow.text = game.created
-//
-//        val authorId = game.author
-//        val ref = FirebaseDatabase.getInstance().getReference("/users/$authorId")
-//        ref.addListenerForSingleValueEvent(object: ValueEventListener {
-//            override fun onDataChange(p0: DataSnapshot) {
-//                val user = p0.getValue(User::class.java)
-//                viewHolder.itemView.author_gamerow.text = user?.username
-//            }
-//            override fun onCancelled(p0: DatabaseError) {
-//
-//            }
-//        })
-//    }
-//
-//    override fun getLayout(): Int {
-//        return R.layout.game_row
-//    }
-//}

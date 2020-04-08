@@ -3,7 +3,6 @@ package com.hanrstudios.drinkingbuddies.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -36,7 +35,7 @@ class GameViewerActivity : AppCompatActivity() {
         setGame(currentGame!!)
 //        }
 
-        rate_button.setOnClickListener {
+        rate_button_gameview.setOnClickListener {
             rateGame()
         }
 
@@ -80,7 +79,7 @@ class GameViewerActivity : AppCompatActivity() {
                 p0.children.forEach{
                     ratedGames.add(it.toString())
                     if (ratedGames.contains(game.gameId)) {
-                        rate_button.isVisible = false
+                        rate_button_gameview.isClickable = false
                     }
                 }
             }
@@ -88,42 +87,6 @@ class GameViewerActivity : AppCompatActivity() {
             }
         })
     }
-
-//    private fun setGameAsGameOfTheDay() {
-//        val ref = FirebaseDatabase.getInstance().getReference("/games/-LujoKt5xDtfLwbYUTIP").push()
-//        val author = ref.child("author").toString()
-//        val title = ref.child("title").toString()
-//        val private = ref.child("private").toString().toBoolean()
-//        val category = ref.child("category").toString()
-//        val rules = ref.child("rules").toString()
-//        val created = ref.child("created").toString().toLong()
-//
-//        currentGame = DrinkingGame(author, title, private, category, rules, created)
-//
-//        game_name_viewer.text = title
-//        author_gameviewer.text = author
-//        gamerules_gameviewer.text = rules
-//        posteddate_gameviewer.text = "today"
-//
-//    }
-
-
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId) {
-//            R.id.menu_go_to_menu -> {
-//                val intent = Intent(this, BrowseGamesActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                startActivity(intent)
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
-//
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.nav_menu, menu)
-//        return super.onCreateOptionsMenu(menu)
-//    }
 }
 
 

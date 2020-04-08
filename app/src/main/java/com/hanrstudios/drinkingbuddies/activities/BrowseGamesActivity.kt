@@ -20,6 +20,8 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_browse_games.*
 import kotlinx.android.synthetic.main.game_row.view.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class BrowseGamesActivity : AppCompatActivity() {
 
@@ -154,12 +156,15 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
             override fun onCancelled(p0: DatabaseError) {
             }
         })
+
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.CEILING
         //displaying the drunk rating in the recycler view
         val refDrunkAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/drunkRating/average")
         refDrunkAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                    val drunkAvg = p0.value?.toString()
-                    viewHolder.itemView.drunkrating_gamerow.text = "Drunk Rating: $drunkAvg"
+                val drunkAvg = p0.value?.toString()?.toFloat() ?: 0f
+                viewHolder.itemView.drunkrating_gamerow.text = "Drunk Rating: ${df.format(drunkAvg)}"
             }
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -168,8 +173,8 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
         val refFunAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/funRating/average")
         refFunAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                    val funAvg = p0.value.toString()
-                    viewHolder.itemView.funrating_gamerow.text = "Fun Rating: $funAvg"
+                    val funAvg = p0.value?.toString()?.toFloat() ?: 0f
+                    viewHolder.itemView.funrating_gamerow.text = "Fun Rating: ${df.format(funAvg)}"
             }
             override fun onCancelled(p0: DatabaseError) {
 
