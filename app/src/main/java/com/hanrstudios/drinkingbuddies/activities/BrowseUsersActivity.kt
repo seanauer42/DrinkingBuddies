@@ -82,6 +82,17 @@ class BrowseUsersActivity : AppCompatActivity() {
 class UserItem(val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.username_userrow.text = user.username
+
+        //get the most recent game for each user
+        val refRecentGame = FirebaseDatabase.getInstance().getReference("users/${user.uid}/currentGame")
+        refRecentGame.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                val recentGame = p0.value.toString()
+                viewHolder.itemView.most_recent_game_userrow.text = recentGame
+            }
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
 //        val mostRecentGame = FirebaseDatabase.getInstance().getReference("userInfo/$user.uid/mostRecentGame").toString()
 //        viewHolder.itemView.most_recent_game_userrow.text = mostRecentGame
     }

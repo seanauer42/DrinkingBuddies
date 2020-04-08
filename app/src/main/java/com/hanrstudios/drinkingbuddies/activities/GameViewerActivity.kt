@@ -55,7 +55,7 @@ class GameViewerActivity : AppCompatActivity() {
         //set this game as user's current game
         val uid = FirebaseAuth.getInstance().uid
         val refCurrentGame = mDatabase.getReference("/users/$uid/currentGame")
-        refCurrentGame.setValue(game.gameId)
+        refCurrentGame.setValue(game.title)
 
         val creator = game.author
         val ref = mDatabase.getReference("/users/$creator")

@@ -138,18 +138,13 @@ class BrowseGamesActivity : AppCompatActivity() {
 class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        //getting the ratings that will be set in the recycler view
-//        val refFunAvg = FirebaseDatabase.getInstance().getReference("games/${game.gameId}/drunkRating/average")
-//        val refDrunkAvg = FirebaseDatabase.getInstance().getReference("games/${game.gameId}/funRating/average")
         //will be called in our user layout
         viewHolder.itemView.gametitle_gamerow.text = game.title
         viewHolder.itemView.category_gamerow.text = game.category
         viewHolder.itemView.createddate_gamerow.text = game.created
-//        viewHolder.itemView.drunkrating_gamerow.text = game.getDrunkRating()
-//        viewHolder.itemView.funrating_gamerow.text = game.getFunRating()
 
-        val authorId = game.author
         //displaying the username in the recycler view
+        val authorId = game.author
         val ref = FirebaseDatabase.getInstance().getReference("/users/$authorId")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -163,15 +158,8 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
         val refDrunkAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/drunkRating/average")
         refDrunkAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                if (game.gameId == null) {
-                    return
-                } else {
-                    if (p0.value == null) {
-                        refDrunkAvg.setValue(0)
-                    }
                     val drunkAvg = p0.value?.toString()
                     viewHolder.itemView.drunkrating_gamerow.text = "Drunk Rating: $drunkAvg"
-                }
             }
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -180,15 +168,8 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
         val refFunAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/funRating/average")
         refFunAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                if (game.gameId == null) {
-                    return
-                } else {
-                    if (p0.value == null) {
-                        refFunAvg.setValue(0)
-                    }
                     val funAvg = p0.value.toString()
                     viewHolder.itemView.funrating_gamerow.text = "Fun Rating: $funAvg"
-                }
             }
             override fun onCancelled(p0: DatabaseError) {
 
