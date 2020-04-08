@@ -34,12 +34,11 @@ class RatingActivity : AppCompatActivity() {
         val refDrunk = FirebaseDatabase.getInstance().getReference("users/$uid/ratings/drunk/$gameId")
         val refFun = FirebaseDatabase.getInstance().getReference("users/$uid/ratings/fun/$gameId")
 
-        game?.averageDrunkRating(drunkRating)
-        game?.averageFunRating(funRating)
-
         refDrunk.setValue(drunkRating)
         refFun.setValue(funRating)
             .addOnSuccessListener {
+                game?.averageDrunkRating(drunkRating)
+                game?.averageFunRating(funRating)
                 Toast.makeText(this, "you set fun rating to: $funRating and drunk rating to: $drunkRating", Toast.LENGTH_LONG).show()
                 finish()
             }

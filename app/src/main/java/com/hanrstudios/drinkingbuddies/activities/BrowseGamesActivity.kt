@@ -149,11 +149,46 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
 //        viewHolder.itemView.funrating_gamerow.text = game.getFunRating()
 
         val authorId = game.author
+        //displaying the username in the recycler view
         val ref = FirebaseDatabase.getInstance().getReference("/users/$authorId")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val user = p0.getValue(User::class.java)
                 viewHolder.itemView.author_gamerow.text = user?.username
+            }
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+        //displaying the drunk rating in the recycler view
+        val refDrunkAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/drunkRating/average")
+        refDrunkAvg.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (game.gameId == null) {
+                    return
+                } else {
+                    if (p0.value == null) {
+                        refDrunkAvg.setValue(0)
+                    }
+                    val drunkAvg = p0.value?.toString()
+                    viewHolder.itemView.drunkrating_gamerow.text = "Drunk Rating: $drunkAvg"
+                }
+            }
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+        //displaying the fun rating in the recycler view
+        val refFunAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/funRating/average")
+        refFunAvg.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                if (game.gameId == null) {
+                    return
+                } else {
+                    if (p0.value == null) {
+                        refFunAvg.setValue(0)
+                    }
+                    val funAvg = p0.value.toString()
+                    viewHolder.itemView.funrating_gamerow.text = "Fun Rating: $funAvg"
+                }
             }
             override fun onCancelled(p0: DatabaseError) {
 
