@@ -43,6 +43,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:background="@drawable/button_light_gray"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
             android:text="Kings"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="@+id/most_recent_userpage"
@@ -87,9 +92,10 @@
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/createdgames_recyclerview_userpage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="450dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

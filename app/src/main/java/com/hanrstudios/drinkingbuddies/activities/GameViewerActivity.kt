@@ -3,6 +3,9 @@ package com.hanrstudios.drinkingbuddies.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import androidx.core.view.isVisible
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -35,7 +38,7 @@ class GameViewerActivity : AppCompatActivity() {
         setGame(currentGame!!)
 //        }
 
-        rate_button_gameview.setOnClickListener {
+        rate_button_gameviewer.setOnClickListener {
             rateGame()
         }
 
@@ -72,14 +75,18 @@ class GameViewerActivity : AppCompatActivity() {
         gamerules_gameviewer.text = game.rules
         posteddate_gameviewer.text = game.created
 
+
+
         val ratedGames = mutableListOf<String>()
-        val refRatedGames = mDatabase.getReference("/users/$uid/ratings/drunk/${game.gameId}")
+        val refRatedGames = mDatabase.getReference("/users/$uid/ratings/drunk/")
         refRatedGames.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 p0.children.forEach{
-                    ratedGames.add(it.toString())
+                    ratedGames.add(it.key.toString())
+                    Log.d("gameIds", ratedGames.toString())
+                    Log.d("this gameId", game.gameId)
                     if (ratedGames.contains(game.gameId)) {
-                        rate_button_gameview.isClickable = false
+                        rate_button_gameviewer.visibility = GONE
                     }
                 }
             }

@@ -20,7 +20,8 @@ class DrinkingGame(
 //        val ratings = mutableListOf<Double>()
         var avg: Float
         var num: Int
-        val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
+        val refAvg =
+            FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
         val refNum = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/num")
 
         refAvg.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -57,35 +58,11 @@ class DrinkingGame(
 //
     }
 
-    fun getDrunkRating(): String {
-        val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
-        refAvg.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(p0: DataSnapshot) {
-                val avg = p0.value.toString()
-            }
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-        })
-        return refAvg.database.toString()
-//        return refAvg.datasnapshot
-//        refAvg.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(p0: DataSnapshot): DataSnapshot {
-//                return p0.child()
-//            }
-//            override fun onCancelled(p0: DatabaseError) {
-//
-//            }
-//        })
-    }
-
     fun averageFunRating(funRating: Float) {
         var avg: Float
         var num: Int
         val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/funRating/average")
         val refNum = FirebaseDatabase.getInstance().getReference("games/$gameId/funRating/num")
-//        val refAvg = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/average")
-//        val refNum = FirebaseDatabase.getInstance().getReference("games/$gameId/drunkRating/num")
 
         refAvg.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
@@ -103,46 +80,15 @@ class DrinkingGame(
                         refAvg.setValue(newAverage)
                         refNum.setValue(num + 1)
                     }
+
                     override fun onCancelled(p0: DatabaseError) {
                     }
                 })
             }
+
             override fun onCancelled(p0: DatabaseError) {
             }
         })
 
-//        val avg = refAvg.toString().toFloat()
-//        val num = refNum.toString().toFloat()
-
-//        val newAverage = avg + ((funRating- avg) / (num + 1))
-
-//        refAvg.setValue(newAverage)
-//        refNum.setValue(num + 1)
-
-//        val ratings = mutableListOf<Double>()
-//        val ref = FirebaseDatabase.getInstance().getReference("games/$gameId/funRating")
-
-//        ref.addListenerForSingleValueEvent(object : ValueEventListener {
-//            override fun onDataChange(p0: DataSnapshot) {
-//                p0.children.forEach{
-//                    val rating = it.value.toString().toDouble()
-//                    ratings.add(rating)
-//                }
-//            }
-//
-//            override fun onCancelled(p0: DatabaseError) {
-//            }
-//        })
-//
-//        if (ratings.size == 0) {
-//            return "No fun ratings yet"
-//        } else {
-//            return "Fun: " + ratings.average().toString()
-//        }
-    }
-
-    fun getFunRating(): String {
-        val refFun = FirebaseDatabase.getInstance().getReference("games/$gameId/funRating/average")
-        return refFun.database.toString()
     }
 }
