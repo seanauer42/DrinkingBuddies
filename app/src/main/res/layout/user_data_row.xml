@@ -47,4 +47,14 @@
             android:text="None"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+            android:id="@+id/friendstatus_userrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="Not Friends"
+            app:layout_constraintBottom_toTopOf="@+id/textView3"
+            app:layout_constraintStart_toEndOf="@+id/username_userrow"
+            app:layout_constraintTop_toTopOf="@+id/username_userrow" />
 </androidx.constraintlayout.widget.ConstraintLayout>

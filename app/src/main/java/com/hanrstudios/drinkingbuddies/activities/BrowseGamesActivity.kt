@@ -33,7 +33,7 @@ class BrowseGamesActivity : AppCompatActivity() {
         val GAME_KEY = "GAME_KEY"
     }
 
-//    val adapter = GroupAdapter<ViewHolder>()
+    val mDatabase = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class BrowseGamesActivity : AppCompatActivity() {
     private fun fetchCurrentUser() {
         var currentUser: User?
         val uid = FirebaseAuth.getInstance().uid
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val ref = mDatabase.getReference("/users/$uid")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 currentUser = p0.getValue(User::class.java)
@@ -83,7 +83,7 @@ class BrowseGamesActivity : AppCompatActivity() {
         recyclerview_browsegames.adapter = adapter
         recyclerview_browsegames.layoutManager = LinearLayoutManager(this)
 
-        val ref = FirebaseDatabase.getInstance().getReference("games")
+        val ref = mDatabase.getReference("games")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
@@ -139,20 +139,24 @@ class BrowseGamesActivity : AppCompatActivity() {
 
 class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
 
+    val mDatabase = FirebaseDatabase.getInstance()
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        val view = viewHolder.itemView
         //will be called in our user layout
-        viewHolder.itemView.gametitle_gamerow.text = game.title
-        viewHolder.itemView.category_gamerow.text = game.category
-        viewHolder.itemView.createddate_gamerow.text = game.created
+        view.gametitle_gamerow.text = game.title
+        view.category_gamerow.text = game.category
+        view.createddate_gamerow.text = game.created
 
         //displaying the username in the recycler view
         val authorId = game.author
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$authorId")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+        val ref = mDatabase.getReference("/users/$authorId")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val user = p0.getValue(User::class.java)
-                viewHolder.itemView.author_gamerow.text = user?.username
+                view.author_gamerow.text = user?.username
             }
+
             override fun onCancelled(p0: DatabaseError) {
             }
         })
@@ -160,22 +164,24 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         //displaying the drunk rating in the recycler view
-        val refDrunkAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/drunkRating/average")
+        val refDrunkAvg = mDatabase.getReference("/games/${game.gameId}/drunkRating/average")
         refDrunkAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
                 val drunkAvg = p0.value?.toString()?.toFloat() ?: 0f
-                viewHolder.itemView.drunkrating_gamerow.text = "Drunk Rating: ${df.format(drunkAvg)}"
+                view.drunkrating_gamerow.text = "Drunk Rating: ${df.format(drunkAvg)}"
             }
+
             override fun onCancelled(p0: DatabaseError) {
             }
         })
         //displaying the fun rating in the recycler view
-        val refFunAvg = FirebaseDatabase.getInstance().getReference("/games/${game.gameId}/funRating/average")
+        val refFunAvg = mDatabase.getReference("/games/${game.gameId}/funRating/average")
         refFunAvg.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                    val funAvg = p0.value?.toString()?.toFloat() ?: 0f
-                    viewHolder.itemView.funrating_gamerow.text = "Fun Rating: ${df.format(funAvg)}"
+                val funAvg = p0.value?.toString()?.toFloat() ?: 0f
+                view.funrating_gamerow.text = "Fun Rating: ${df.format(funAvg)}"
             }
+
             override fun onCancelled(p0: DatabaseError) {
 
             }

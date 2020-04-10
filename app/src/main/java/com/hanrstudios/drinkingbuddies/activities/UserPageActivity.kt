@@ -2,8 +2,12 @@ package com.hanrstudios.drinkingbuddies.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View.GONE
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -24,7 +28,7 @@ class UserPageActivity : AppCompatActivity() {
         val GAME_KEY = "GAME_KEY"
     }
 
-    var currentUser: User? = null
+    var thisUser: User? = null
 
     var recentGame: String? = null
 
@@ -36,9 +40,11 @@ class UserPageActivity : AppCompatActivity() {
 
         populateCreatedGames()
 
-        currentUser = intent.getParcelableExtra(BrowseUsersActivity.USER_KEY)
+        thisUser = intent.getParcelableExtra(BrowseUsersActivity.USER_KEY)
 
-        setUser(currentUser!!)
+        friendStatus()
+
+        setUser(thisUser!!)
 
         recent_game_userpage.setOnClickListener {
             goToGame()
@@ -60,7 +66,7 @@ class UserPageActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 p0.children.forEach {
                     val game = it.getValue(DrinkingGame::class.java)
-                    if (game != null && currentUser?.uid != null && game.author == currentUser?.uid ) {
+                    if (game != null && thisUser?.uid != null && game.author == thisUser?.uid ) {
                         adapter.add(CreatedGame(game))
                     }
                     adapter.setOnItemClickListener { item, view ->
@@ -77,6 +83,29 @@ class UserPageActivity : AppCompatActivity() {
             override fun onCancelled(p0: DatabaseError) {
             }
         })
+    }
+
+    private fun friendStatus() {
+        val myUid = FirebaseAuth.getInstance().uid
+        val thisUid = thisUser?.uid
+        val ref = mDatabase.getReference("/users/$myUid/friends/")
+        val friends = mutableListOf<String>()
+//        val listener = object: ValueEventListener {
+        ref.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.children.forEach{
+                    friends.add(it.key.toString())
+                    Log.d("friends", friends.toString())
+                    Log.d("friends", thisUid)
+                    if (friends.contains(thisUid)) {
+                        addfriend_button_userpage.visibility = GONE
+                    }
+                }
+            }
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+//        ref.addValueEventListener(listener)
     }
 
     private fun goToGame() {
@@ -102,8 +131,23 @@ class UserPageActivity : AppCompatActivity() {
     }
 
     private fun addFriend() {
-        val uid = currentUser?.uid
-        val ref = mDatabase.getReference("/users/$uid")
+        val thisUid = thisUser?.uid
+        val myUid = FirebaseAuth.getInstance().uid
+        val refFriend = mDatabase.getReference("/users/$myUid/friends/$thisUid")
+        refFriend.setValue("True")
+            .addOnSuccessListener {
+                Toast.makeText(this, "you are now friends with ${thisUser?.username}!", Toast.LENGTH_SHORT).show()
+            }
+        //making the listener before implementation just to try it out
+//        val listener = object: ValueEventListener {
+//            override fun onDataChange(p0: DataSnapshot) {
+//
+//            }
+//            override fun onCancelled(p0: DatabaseError) {
+//
+//            }
+//        }
+//        refFriend.addValueEventListener(listener)
     }
 
     private fun setUser(user: User) {
@@ -130,7 +174,7 @@ class CreatedGame(val game: DrinkingGame) : Item<ViewHolder>() {
         val mDatabase = FirebaseDatabase.getInstance()
         val df = DecimalFormat("#.##")
 
-        viewHolder.itemView.gamename_gamerow_userpage.text = game.title
+        view.gamename_gamerow_userpage.text = game.title
         view.datecreated_gamerow_userpage.text = game.created
         view.gamecategory_gamerow_userpage.text = game.category
 
