@@ -48,10 +48,6 @@ class BrowseGamesActivity : AppCompatActivity() {
         supportActionBar?.title = ""
     }
 
-//    private fun gameOfTheDay() {
-//        val intent = Intent(this, GameViewerActivity::class.java)
-//        startActivity(intent)
-//    }
 
     private fun fetchCurrentUser() {
         var currentUser: User?
@@ -147,6 +143,11 @@ class GameItem(val game: DrinkingGame) : Item<ViewHolder>() {
         view.gametitle_gamerow.text = game.title
         view.category_gamerow.text = game.category
         view.createddate_gamerow.text = game.created
+        if (game.private) {
+            view.privateboolean_gamerow.text = "Private"
+        } else {
+            view.privateboolean_gamerow.text = ""
+        }
 
         //displaying the username in the recycler view
         val authorId = game.author

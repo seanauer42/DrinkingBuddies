@@ -20,6 +20,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_user_page.*
 import kotlinx.android.synthetic.main.gamerow_userpage.view.*
+import kotlinx.android.synthetic.main.user_data_row.*
 import java.text.DecimalFormat
 
 class UserPageActivity : AppCompatActivity() {

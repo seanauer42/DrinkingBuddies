@@ -1,10 +1,13 @@
 package com.hanrstudios.drinkingbuddies.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -81,7 +84,10 @@ class BrowseUsersActivity : AppCompatActivity() {
 //populating the rows for users
 class UserItem(val user: User) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.username_userrow.text = user.username
+        val view = viewHolder.itemView
+        val myUid = FirebaseAuth.getInstance().uid
+
+        view.username_userrow.text = user.username
 
         //get the most recent game for each user
         val refRecentGame = FirebaseDatabase.getInstance().getReference("users/${user.uid}/currentGame")
@@ -89,6 +95,27 @@ class UserItem(val user: User) : Item<ViewHolder>() {
             override fun onDataChange(p0: DataSnapshot) {
                 val recentGame = p0.value.toString()
                 viewHolder.itemView.most_recent_game_userrow.text = recentGame
+            }
+            override fun onCancelled(p0: DatabaseError) {
+            }
+        })
+        val green = R.color.green
+        val red = R.color.red
+        val friends = mutableListOf<String>()
+        val refFriends = FirebaseDatabase.getInstance().getReference("users/$myUid/friends")
+        refFriends.addValueEventListener(object: ValueEventListener {
+            @SuppressLint("ResourceAsColor")
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.children.forEach {
+                    friends.add(it.key.toString())
+                    if (friends.contains(user.uid)) {
+                        view.friendstatus_userrow.text = "Friends"
+                        view.friendstatus_userrow.setTextColor(green)
+                    } else {
+                        view.friendstatus_userrow.text = "Not Friends"
+                        view.friendstatus_userrow.setTextColor(red)
+                    }
+                }
             }
             override fun onCancelled(p0: DatabaseError) {
             }

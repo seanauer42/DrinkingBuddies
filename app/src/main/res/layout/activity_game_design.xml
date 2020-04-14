@@ -30,8 +30,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:hint="Title"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:textColor="@android:color/white"
+            android:textColorHint="@color/lightGray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,11 +52,13 @@
 
     <Spinner
             android:id="@+id/game_category_spinner_design"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/game_name_design" />
@@ -67,6 +70,8 @@
             android:layout_marginTop="64dp"
             android:layout_marginBottom="16dp"
             android:text="Private  "
+            android:textColor="@color/lightGray"
+            android:textColorHint="@android:color/white"
             app:layout_constraintBottom_toTopOf="@+id/game_design_submit_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,6 +87,7 @@
             android:hint="Rules"
             android:inputType="textMultiLine|textCapSentences"
             android:textColor="@android:color/white"
+            android:textColorHint="@color/lightGray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/game_category_spinner_design" />

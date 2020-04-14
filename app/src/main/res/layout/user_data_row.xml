@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background"
         android:orientation="vertical">
 
     <ImageView
@@ -25,6 +26,7 @@
             android:layout_marginTop="16dp"
             android:layout_toEndOf="@+id/profile_image_userrow"
             android:text="Username"
+            android:textColor="@android:color/white"
             android:textSize="24sp"
             app:layout_constraintStart_toEndOf="@+id/profile_image_userrow"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Most Recent Game:"
+            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="@+id/username_userrow"
             app:layout_constraintTop_toBottomOf="@+id/username_userrow" />
 
@@ -45,6 +48,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="None"
+            android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -54,6 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="Not Friends"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/textView3"
             app:layout_constraintStart_toEndOf="@+id/username_userrow"
             app:layout_constraintTop_toTopOf="@+id/username_userrow" />
