@@ -13,7 +13,9 @@ import com.hanrstudios.drinkingbuddies.classes.DrinkingGame
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_game_design.*
+import kotlinx.android.synthetic.main.activity_game_viewer.*
 import kotlinx.android.synthetic.main.activity_game_viewer.view.*
+import kotlinx.android.synthetic.main.activity_game_viewer.view.game_name_viewer
 import kotlinx.android.synthetic.main.game_row.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -21,9 +23,17 @@ import java.time.format.FormatStyle
 
 class GameDesignActivity : AppCompatActivity() {
 
+    var editingGame: DrinkingGame? = null
+    val mDatabase = FirebaseDatabase.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_design)
+
+        editingGame = intent.getParcelableExtra(GameViewerActivity.GAME_KEY)
+        if (editingGame != null) {
+            editGame()
+        }
 
         game_design_submit_button.setOnClickListener {
             createGame()
@@ -42,44 +52,91 @@ class GameDesignActivity : AppCompatActivity() {
         val GAME_KEY = "GAME_KEY"
     }
 
+    private fun editGame() {
+        setCatSpinner()
+        game_name_design.setText(editingGame?.title)
+        onedrinkrules_edittext_design.setText(editingGame?.rules)
+        privacy_switch_design.isChecked = editingGame?.private ?: false
+    }
+
+    private fun setCatSpinner() {
+        val catSpinner = game_category_spinner_design
+        when (editingGame?.category) {
+            "Movie" -> catSpinner.setSelection(1)
+            "Cards" -> catSpinner.setSelection(2)
+            "Video" -> catSpinner.setSelection(3)
+            "Event" -> catSpinner.setSelection(4)
+            "Misc" -> catSpinner.setSelection(5)
+            else -> {
+                catSpinner.setSelection(0)
+            }
+        }
+    }
+
     private fun createGame() {
         val title = game_name_design.text.toString()
         val private: Boolean = privacy_switch_design.isChecked
         val rules = onedrinkrules_edittext_design.text.toString()
         val cat = game_category_spinner_design.selectedItem.toString()
-        val author = FirebaseAuth.getInstance().uid.toString()
-        val currentDate = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
 
-        val ref = FirebaseDatabase.getInstance().getReference("/games").push()
-        val gameId = ref.key
+        if (editingGame != null) {
+            val game = editingGame
+            val path = "/games/${game?.gameId}"
+            if (game?.title != title) {
+                val refTitle = mDatabase.getReference("$path/title")
+                refTitle.setValue(title)
+            }
+            if (game?.private != privacy_switch_design.isChecked) {
+                val refPrivate = mDatabase.getReference("$path/private")
+                refPrivate.setValue(private)
+            }
+            if (game?.rules != rules) {
+                val refRules = mDatabase.getReference("$path/rules")
+                refRules.setValue(rules)
+            }
+            if (game?.category != cat) {
+                val refCat = mDatabase.getReference("$path/category")
+                refCat.setValue(cat)
+            }
 
-        val drinkingGame = DrinkingGame(author, title, private, cat, rules, currentDate, gameId)
+        } else {
 
-        ref.setValue(drinkingGame)
-            .addOnSuccessListener {
+            val author = FirebaseAuth.getInstance().uid.toString()
+            val currentDate =
+                LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
 
-                if (private) {
-                    val gameItem = ThisGame(drinkingGame)
 
-                    val intent = Intent(this, PrivacySelectingActivity::class.java)
-                    intent.putExtra(GAME_KEY, gameItem.game)
+            val ref = FirebaseDatabase.getInstance().getReference("/games").push()
+            val gameId = ref.key
+
+            val drinkingGame = DrinkingGame(author, title, private, cat, rules, currentDate, gameId)
+
+            ref.setValue(drinkingGame)
+                .addOnSuccessListener {
+
+                    if (private) {
+                        val gameItem = ThisGame(drinkingGame)
+
+                        val intent = Intent(this, PrivacySelectingActivity::class.java)
+                        intent.putExtra(GAME_KEY, gameItem.game)
 //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    this.finish()
+                        startActivity(intent)
+                        this.finish()
 
-                } else {
-                    val gameItem = ThisGame(drinkingGame)
+                    } else {
+                        val gameItem = ThisGame(drinkingGame)
 
-                    val intent = Intent(this, GameViewerActivity::class.java)
-                    intent.putExtra(GAME_KEY, gameItem.game)
+                        val intent = Intent(this, GameViewerActivity::class.java)
+                        intent.putExtra(GAME_KEY, gameItem.game)
 //                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
-                    this.finish()
+                        startActivity(intent)
+                        this.finish()
+
+                    }
+
 
                 }
-
-
-            }
+        }
     }
 
 }

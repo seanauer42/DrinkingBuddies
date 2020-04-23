@@ -110,10 +110,10 @@ class UserItem(val user: User) : Item<ViewHolder>() {
                     friends.add(it.key.toString())
                     if (friends.contains(user.uid)) {
                         view.friendstatus_userrow.text = "Friends"
-                        view.friendstatus_userrow.setTextColor(green)
+//                        view.friendstatus_userrow.setTextColor(green)
                     } else {
-                        view.friendstatus_userrow.text = "Not Friends"
-                        view.friendstatus_userrow.setTextColor(red)
+                        view.friendstatus_userrow.text = ""
+//                        view.friendstatus_userrow.setTextColor(red)
                     }
                 }
             }
