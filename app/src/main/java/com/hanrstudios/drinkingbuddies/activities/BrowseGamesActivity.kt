@@ -81,14 +81,14 @@ class BrowseGamesActivity : AppCompatActivity() {
 
         val ref = mDatabase.getReference("games")
         val gameList = mutableListOf<DrinkingGame>()
-        ref.addValueEventListener(object : ValueEventListener {
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
                 p0.children.forEach {
                     Log.d("NewGame", it.toString())
                     val game = it.getValue(DrinkingGame::class.java)
 
-                    if (game != null && gameList.contains(game)) {
+                    if (game != null && !gameList.contains(game)) {
                         gameList.add(game)
                         adapter.add(GameItem(game))
                     }
