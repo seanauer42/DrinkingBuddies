@@ -93,7 +93,7 @@
                     android:id="@+id/editgame_gameviewer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="24dp"
                     android:background="@drawable/background_button_dark"
                     android:text="Edit"

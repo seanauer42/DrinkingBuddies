@@ -71,7 +71,7 @@ class GameViewerActivity : AppCompatActivity() {
                 p0.children.forEach{
                     ratedGames.add(it.key.toString())
                     Log.d("gameIds", ratedGames.toString())
-                    Log.d("this gameId", game.gameId)
+                    Log.d("this gameId", game.gameId!!)
                     if (ratedGames.contains(game.gameId)) {
                         rate_button_gameviewer.visibility = GONE
                     }
@@ -124,6 +124,10 @@ class GameViewerActivity : AppCompatActivity() {
         gamerules_gameviewer.text = game.rules
         posteddate_gameviewer.text = game.created
 
+    }
+
+    override fun onBackPressed() {
+        this.finish()
     }
 }
 
