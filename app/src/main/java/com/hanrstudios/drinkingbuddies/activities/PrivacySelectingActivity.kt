@@ -60,7 +60,7 @@ class PrivacySelectingActivity : AppCompatActivity() {
         val drinkingGame: DrinkingGame = intent.getParcelableExtra(GameDesignActivity.GAME_KEY) ?: return
         val uid = user.uid
 
-        val ref = FirebaseDatabase.getInstance().getReference("/user-info/$uid").push()
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid/privateGames/${drinkingGame.gameId}")
         ref.setValue(drinkingGame)
 
     }
