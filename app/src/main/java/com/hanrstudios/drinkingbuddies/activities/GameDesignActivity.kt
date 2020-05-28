@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.hanrstudios.drinkingbuddies.R
@@ -80,23 +82,66 @@ class GameDesignActivity : AppCompatActivity() {
         val cat = game_category_spinner_design.selectedItem.toString()
 
         if (editingGame != null) {
+            //this gets called when a game is being edited
+            var changedItems = mutableListOf<String>()
+            Log.d("EDITING_GAME", "this game has already been created")
             val game = editingGame
             val path = "/games/${game?.gameId}"
             if (game?.title != title) {
                 val refTitle = mDatabase.getReference("$path/title")
                 refTitle.setValue(title)
+                    .addOnSuccessListener {
+                        changedItems.add(0,"the title")
+                    }
             }
             if (game?.private != privacy_switch_design.isChecked) {
                 val refPrivate = mDatabase.getReference("$path/private")
                 refPrivate.setValue(private)
+                if (privacy_switch_design.isChecked) {
+                    val privateString = "and made it private!"
+                } else {
+                    val privateString = "and made it public!"
+                }
             }
             if (game?.rules != rules) {
                 val refRules = mDatabase.getReference("$path/rules")
                 refRules.setValue(rules)
+                    .addOnSuccessListener {
+                        changedItems.add("the rules")
+                    }
             }
             if (game?.category != cat) {
                 val refCat = mDatabase.getReference("$path/category")
                 refCat.setValue(cat)
+                    .addOnSuccessListener {
+                        changedItems.add("the category")
+                    }
+            }
+
+            val youChanged: String = changedItems.toString()
+            Log.d("edit", youChanged)
+            Toast.makeText(this, "You changed $youChanged", Toast.LENGTH_LONG).show()
+
+            //send the user to either the private selecting intent or the game viewer intent
+            val drinkingGame = DrinkingGame(editingGame!!.author, title, private, cat, rules, editingGame!!.created, editingGame!!.gameId)
+            if (private) {
+                val gameItem = ThisGame(drinkingGame)
+
+                val intent = Intent(this, PrivacySelectingActivity::class.java)
+                intent.putExtra(GAME_KEY, gameItem.game)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                this.finish()
+
+            } else {
+                val gameItem = ThisGame(drinkingGame)
+
+                val intent = Intent(this, GameViewerActivity::class.java)
+                intent.putExtra(GAME_KEY, gameItem.game)
+//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                this.finish()
+
             }
 
         } else {

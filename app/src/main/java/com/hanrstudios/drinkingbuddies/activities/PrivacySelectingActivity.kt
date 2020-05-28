@@ -22,9 +22,14 @@ import kotlinx.android.synthetic.main.selectable_users_row.view.*
 
 class PrivacySelectingActivity : AppCompatActivity() {
 
+    val selectedUsers = mutableListOf<User>()
+
     class UserSelect(val user: User) : Item<ViewHolder>() {
         override fun bind(viewHolder: ViewHolder, position: Int) {
             viewHolder.itemView.username_checkbox.text = user.username
+            if (viewHolder.itemView.username_checkbox.isChecked) {
+                selectedUsers.add(user)
+            }
         }
         override fun getLayout(): Int {
             return R.layout.selectable_users_row
@@ -39,6 +44,9 @@ class PrivacySelectingActivity : AppCompatActivity() {
         fetchUsers()
 
         donebutton_privacy.setOnClickListener {
+//            for(user in selectedUsers) {
+//                sendPrivateGame(user)
+//            }
             goToGame()
 
         }
@@ -85,11 +93,18 @@ class PrivacySelectingActivity : AppCompatActivity() {
 
                 adapter.setOnItemClickListener { item, view ->
 
-                    val gameItem = item as GameItem
+                    val user = item as UserItem
 
-                    val intent = Intent(view.context, GameViewerActivity::class.java)
-                    intent.putExtra(BrowseGamesActivity.GAME_KEY, gameItem.game)
-                    startActivity(intent)
+
+                    if (user.isClickable) {
+                        selectedUsers.add(user)
+                    }
+
+//                    val gameItem = item as GameItem
+//
+//                    val intent = Intent(view.context, GameViewerActivity::class.java)
+//                    intent.putExtra(BrowseGamesActivity.GAME_KEY, gameItem.game)
+//                    startActivity(intent)
                 }
 
             }
